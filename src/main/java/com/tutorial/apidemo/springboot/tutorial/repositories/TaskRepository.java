@@ -3,6 +3,7 @@ package com.tutorial.apidemo.springboot.tutorial.repositories;
 import com.tutorial.apidemo.springboot.tutorial.models.entities.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,13 @@ import java.util.List;
 
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
+
+//    Page<Task> findAll(Pageable pageable);
+
+    @Override
+    Page<Task> findAll(Pageable pageable);
+
+    Page<Task> findAll(Pageable pageable, Sort sort);
     @Query(value = """
                 select employee_name
                 from tasks t
@@ -96,6 +104,13 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                 having employee_name in (':name')
             """, nativeQuery = true)
     List<?> showCountPersonalWork(@Param("name") List<String> name);
+
+    @Query(value = """
+                select m 
+                from tasks m
+                where task_name like "%front end"
+            """, nativeQuery = true)
+    List<?> showWhatToDo();
 
 
 
