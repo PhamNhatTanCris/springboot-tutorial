@@ -7,6 +7,10 @@ import com.tutorial.apidemo.springboot.tutorial.repositories.TaskRepository;
 import com.tutorial.apidemo.springboot.tutorial.services.TaskService;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +66,18 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task updateTask(Task task) {
         return taskRepository.save(task);
+    }
+
+    @Override
+    public Page<Task> getAll(int page, int size, String sortField, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("asc") ?
+                    Sort.by(sortField).ascending() :
+                    Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return taskRepository.findAll(pageable);
+
     }
 
 }

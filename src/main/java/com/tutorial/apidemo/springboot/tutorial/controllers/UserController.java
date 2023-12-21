@@ -47,7 +47,16 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/user")
+    public ResponseEntity<?> setRoleUser(@RequestBody RoleToUserForm roleToUserForm) {
+        if(roleToUserForm.getRoleName() == "Admin") {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
 }
+
 @Data
 class RoleToUserForm {
     private String username;

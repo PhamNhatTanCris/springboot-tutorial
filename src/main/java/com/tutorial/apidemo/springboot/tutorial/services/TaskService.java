@@ -1,7 +1,9 @@
 package com.tutorial.apidemo.springboot.tutorial.services;
 
 import com.tutorial.apidemo.springboot.tutorial.models.entities.Task;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 public interface TaskService {
@@ -22,5 +24,10 @@ public interface TaskService {
     List<?> chartEmployeeStatus(List<String> employeeName);
 
     Task updateTask(Task task);
+
+    Page<Task> getAll(int page, int size, String SortField, String sortOrder);
+
+
+
 
 }

@@ -13,12 +13,8 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-//    Page<Task> findAll(Pageable pageable);
-
-    @Override
     Page<Task> findAll(Pageable pageable);
 
-    Page<Task> findAll(Pageable pageable, Sort sort);
     @Query(value = """
                 select employee_name
                 from tasks t

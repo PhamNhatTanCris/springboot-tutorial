@@ -1,9 +1,11 @@
 package com.tutorial.apidemo.springboot.tutorial.controllers;
 
 import com.tutorial.apidemo.springboot.tutorial.models.entities.Task;
-import com.tutorial.apidemo.springboot.tutorial.repositories.TaskRepository;
 import com.tutorial.apidemo.springboot.tutorial.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,32 +15,40 @@ import java.util.List;
 @RequestMapping("/api/task")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class TaskController {
+
     @Autowired
     public TaskService taskService;
+
     @GetMapping
     public List<?> getAllTask(){
         return taskService.getAllTask();
     }
+
     @GetMapping("/{id}")
     public Task getTaskById(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
+
     @PostMapping("/create")
     public Task createTask(@RequestBody Task task) {
         return taskService.createTask(task);
     }
+
     @DeleteMapping("/delete/{id}")
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
+
     @GetMapping("/find/{id}")
     public List<?> findEmployeeByIdTask(@PathVariable Long id) {
         return taskService.findEmployeeByIdTask(id);
     }
+
     @GetMapping("/find-task")
     public List<Task> findTask(){
         return taskService.findTask();
     }
+
     @GetMapping("/count")
     public List<?> countStatus() {
         return taskService.countStatus();
@@ -74,6 +84,40 @@ public class TaskController {
         return ResponseEntity.ok(updatedTask);
 
     }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Task>> getAll(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size,
+                                             @RequestParam(defaultValue = "taskID") String sortField,
+                                             @RequestParam(defaultValue = "desc") String sortOrder
+                                             ) {
+
+        Page<Task> page1 = taskService.getAll(page, size, sortField, sortOrder);
+
+        return ResponseEntity.ok(page1);
+
+    }
+//    @GetMapping("/task/page/{pageNumber}")
+//    public ResponseEntity<?> findPaginated(@PathVariable int pageNumber){
+//
+//        int pageSize = 5;
+//        Page<Task> page = taskService.findAllWithPagination(pageNumber, pageSize);
+//        Sort sort = Sort.by("taskName").descending();
+//        List<Task> taskList = page.getContent();
+//
+//        return ResponseEntity.ok(taskList);
+//    }
+//
+//    @GetMapping("/task/{Role}")
+//    public ResponseEntity<List<Task>> getYouFromYou(@PathVariable String Role) {
+//
+//        String userRole = Role;
+//
+//        if(userRole == "ROLE_ADMIN") {
+//            return ResponseEntity.ok().build();
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
 
 
 }
